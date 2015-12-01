@@ -23,7 +23,7 @@
 				</div>
 				<div class="form-group" id="content">
 					<form name="form" method="post">
-						<table class="table table-striped table-condensed table-hover">
+						<table class="table table-striped table-condensed table-responsive table-hover">
 							<thead>
 								<tr>
 									<th>Fecha</th>
@@ -143,7 +143,7 @@
 			    		//alert(json.mensaje);
 			    		var html = "";
 			    		html += "<form name='form' method='post'>";
-						html += "<table class='table table-striped table-condensed table-hover'>";
+						html += "<table class='table table-striped table-condensed table-responsive table-hover'>";
 						html += "<thead>";
 						html += "<tr>";
 						html += "<th>Fecha</th>";
