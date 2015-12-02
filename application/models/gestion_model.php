@@ -131,10 +131,10 @@ class Gestion_model extends CI_Model
     	}else{
     		$sql = "INSERT INTO log_facturas_sap (empresa, docdate, docnum, linenum, tipodoc, cardcode, cardname, itemcode, itemdesc, 
 				um, whscode, quantity, iva, subtotal, total_neto, city, nit, address2, total_line, total_kilos, 
-				norma_reparto, slpname, centro_costo, estado_factura, kilos_emp, um2, volumen_m3)
+				norma_reparto, slpname, centro_costo, estado_factura, kilos_emp, um2, volumen_m3, cantidad_real)
 				VALUES ('$empresa','$DocDate', '$DocNum', '$LineNum', '$tipodoc', '$CardCode', '$CardName', '$ItemCode', '$Dscription', 
 				'$um', '$WhsCode', '$Quantity', '$Iva', '$SubTotal', '$Total_neto', '$City', '$Nit', '$Address2', 
-				'$Total_line', '$total_kilos', '$norma_reparto', '$SlpName', 'centro_costo', 'P', '$kilos','$um2','$volumen');";
+				'$Total_line', '$total_kilos', '$norma_reparto', '$SlpName', 'centro_costo', 'P', '$kilos','$um2','$volumen','$Quantity');";
 		
 			$this->db->simple_query($sql);
 
@@ -185,14 +185,14 @@ class Gestion_model extends CI_Model
 		return $res->result_array();
 	}
 
-	public function edit_factura($factura, $transp, $fecenv, $horaenv, $plan, $guia, $placa, $valseg, $gastos, $tiposer, $estfac, $obs, $dev, $estdev, $recib, $fecharec, $items, $fletes){
+	public function edit_factura($factura, $transp, $fecenv, $horaenv, $plan, $guia, $placa, $valseg, $gastos, $tiposer, $estfac, $obs, $dev, $recib, $fecharec, $items, $fletes){
 		$sql = "UPDATE log_facturas_sap SET transportador = ". $this->db->escape($transp) .", fecha_envio = ". $this->db->escape($fecenv) .
 				", hora_envio = ". $this->db->escape($horaenv) .", planilla = UPPER(". $this->db->escape($plan) . "), 
 				guia = UPPER(". $this->db->escape($guia) ."), placa = UPPER(". $this->db->escape($placa) . "), 
 				valor_seguro = ". $this->db->escape($valseg) .", otros_gastos = ". $this->db->escape($gastos) .
 				", tipo_servicio = ". $this->db->escape($tiposer) .", estado_factura = ". $this->db->escape($estfac) .
 				", observacion = UPPER(". $this->db->escape($obs) ."), devolucion = UPPER(". $this->db->escape($dev) . "), 
-				estado_dv = ". $this->db->escape($estdev) .", recibido_por = UPPER(". $this->db->escape($recib) . "), 
+				recibido_por = UPPER(". $this->db->escape($recib) . "), 
 				fecha_recibido = ". $this->db->escape($fecharec) .
 				"  WHERE docnum = '$factura' AND empresa = '". $this->session->userdata('sess_empresa') ."'";
 

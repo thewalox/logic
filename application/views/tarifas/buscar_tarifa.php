@@ -29,6 +29,7 @@
 									<th>Transportador</th>
 									<th>Destino</th>
 									<th>Unidad Medida</th>
+									<th>Valor</th>
 									<th></th>
 									<th></th>
 								</tr>
@@ -42,6 +43,7 @@
 								<td><?php echo $tar["desc_transp"]; ?></td>
 								<td><?php echo $tar["destino"]; ?></td>
 								<td><?php echo $tar["desc_unidad"]; ?></td>
+								<td><?php echo number_format($tar["valor"],2,".",","); ?></td>
 								<td><a href="<?php echo base_url('tarifas/form_editar/'. $tar["cod_tarifa"]); ?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
 								<td><a href="<?php echo base_url('tarifas/eliminar_tarifa/'. $tar["cod_tarifa"]); ?>"><span class="glyphicon glyphicon-trash"></span></a></td>
 							</tr>

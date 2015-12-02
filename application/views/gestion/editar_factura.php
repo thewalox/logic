@@ -171,20 +171,7 @@
 				    		<div class="col-md-8">
 				    			<div class="panel panel-primary">
 									<div class="panel-heading">Seguimiento</div>
-									<div class="panel-body">
-										<div class="form-group col-md-6">
-											<label for="dev">Devolucion</label>
-											<input type="text" placeholder="Devolucion" id="dev" name="dev" value="<?php echo $factura[0]["devolucion"]; ?>" class="form-control input-sm">
-										</div>
-										<div class="form-group col-md-6">
-											<label for="estadodev">Estado Devolucion</label>
-											<select class="form-control input-sm" name="estadodev" id="estadodev">
-												<option value="0">...</option>
-												<option value="P" <?php if($factura[0]["estado_dv"] == "P"){ ?> selected="selected" <?php } ?>>Pendiente</option>
-												<option value="OK" <?php if($factura[0]["estado_dv"] == "OK"){ ?> selected="selected" <?php } ?>>Ok</option>
-											</select>
-										</div>
-
+									<div class="panel-body">								
 										<div class="form-group col-md-6">
 											<label for="recibido">Recibido Por</label>
 											<input type="text" placeholder="Recibido Por" id="recibido" name="recibido" value="<?php echo $factura[0]["recibido_por"]; ?>" class="form-control input-sm">
@@ -197,6 +184,10 @@
 							                        <span class="glyphicon glyphicon-calendar"></span>
 							                    </span>
 							            	</div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="dev">Valor Devolucion</label>
+											<input type="text" placeholder="Devolucion" id="dev" name="dev" value="<?php echo $factura[0]["devolucion"]; ?>" class="form-control input-sm">
 										</div>
 									</div>
 								</div>
@@ -366,7 +357,6 @@
 				var estadofac = $("#estadofac").val();
 				var obs = $("#obs").val();
 				var dev = $("#dev").val();
-				var estadodev = $("#estadodev").val();
 				var recibido = $("#recibido").val();
 				var fecrecibo = $("#fecrecibo").val();
 				
@@ -409,7 +399,6 @@
 			    		'estadofac'		: 	estadofac,
 			    		'obs'			: 	obs,
 			    		'dev'			: 	dev,
-			    		'estadodev'		: 	estadodev,
 			    		'recibido'		: 	recibido,
 			    		'fecrecibo'		: 	fecrecibo,
 			    		'items'			: 	items,

@@ -54,7 +54,7 @@ class Tarifas_model extends CI_Model
 	}
 
 	public function get_tarifas($limit, $segmento){
-		$sql = "SELECT lt.cod_tarifa, t.desc_transp, lt.destino, lu.desc_unidad
+		$sql = "SELECT lt.cod_tarifa, t.desc_transp, lt.destino, lu.desc_unidad, lt.valor
 				FROM log_tarifas AS lt
 				LEFT JOIN log_transportadores AS t ON t.cod_transp = lt.cod_transp
 				INNER JOIN log_unidades AS lu ON lu.cod_unidad = lt.und_transp

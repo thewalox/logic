@@ -145,7 +145,7 @@ class Gestion extends CI_controller
 	}
 
 	function editar_factura(){
-		$datos["mensaje"] = $this->Gestion_model->edit_factura($this->input->post("factura"), $this->input->post("transp"), $this->input->post("fecenvio"), $this->input->post("horaenvio"), $this->input->post("planilla"),$this->input->post("guia"), $this->input->post("placa"), $this->input->post("seguro"), $this->input->post("gastos"), $this->input->post("servicio"), $this->input->post("estadofac"),$this->input->post("obs"), $this->input->post("dev"), $this->input->post("estadodev"), $this->input->post("recibido"), $this->input->post("fecrecibo"), $this->input->post("items"), $this->input->post("fletes"));
+		$datos["mensaje"] = $this->Gestion_model->edit_factura($this->input->post("factura"), $this->input->post("transp"), $this->input->post("fecenvio"), $this->input->post("horaenvio"), $this->input->post("planilla"),$this->input->post("guia"), $this->input->post("placa"), $this->input->post("seguro"), $this->input->post("gastos"), $this->input->post("servicio"), $this->input->post("estadofac"),$this->input->post("obs"), $this->input->post("dev"), $this->input->post("recibido"), $this->input->post("fecrecibo"), $this->input->post("items"), $this->input->post("fletes"));
 		echo json_encode($datos);
 	}
 
