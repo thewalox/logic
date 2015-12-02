@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/bootstrap-fileinput.min.css">
 	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/jasny-bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/sub-menus.css" media="screen">
 
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/number-format.js"></script>
@@ -56,14 +57,22 @@
 					            <li><a href="<?php echo base_url(); ?>servicios/form_buscar">Editar Servicio</a></li>
 				          	</ul>				
 						</li>
-						<li class="dropdown">
+						<li class="menu-item dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestion de Facturacion <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 					            <li><a href="<?php echo base_url(); ?>gestion/form_importar">Importar Facturacion SAP</a></li>
 					            <li role="separator" class="divider"></li>
 					            <li><a href="<?php echo base_url(); ?>gestion/form_buscar">Registro de facturas y entregas</a></li>
+					            <li role="separator" class="divider"></li>
+					           	<li class="menu-item dropdown dropdown-submenu">
+		                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consultas</a>
+		                            <ul class="dropdown-menu">
+		                                <li class="menu-item "><a href="<?php echo base_url(); ?>consultas/form_consulta_factura">Facturas x Estado</a></li>
+		                            </ul>
+	                        	</li>
 				          	</ul>				
 						</li>
+
 						
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
