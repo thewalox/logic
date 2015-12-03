@@ -134,7 +134,7 @@ class Gestion_model extends CI_Model
 				norma_reparto, slpname, centro_costo, estado_factura, kilos_emp, um2, volumen_m3, cantidad_real)
 				VALUES ('$empresa','$DocDate', '$DocNum', '$LineNum', '$tipodoc', '$CardCode', '$CardName', '$ItemCode', '$Dscription', 
 				'$um', '$WhsCode', '$Quantity', '$Iva', '$SubTotal', '$Total_neto', '$City', '$Nit', '$Address2', 
-				'$Total_line', '$total_kilos', '$norma_reparto', '$SlpName', 'centro_costo', 'P', '$kilos','$um2','$volumen','$Quantity');";
+				'$Total_line', '$total_kilos', '$norma_reparto', '$SlpName', 'centro_costo', '0', '$kilos','$um2','$volumen','$Quantity');";
 		
 			$this->db->simple_query($sql);
 

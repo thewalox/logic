@@ -20,6 +20,11 @@
                     locale: 'es',
                     format: 'LT'
                 });
+
+                $('#datetimepicker4').datetimepicker({
+                    locale: 'es',
+                    format: 'YYYY-MM-DD'
+                });
         });
 	</script>
 </body>	

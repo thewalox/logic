@@ -67,7 +67,7 @@
 					           	<li class="menu-item dropdown dropdown-submenu">
 		                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Consultas</a>
 		                            <ul class="dropdown-menu">
-		                                <li class="menu-item "><a href="<?php echo base_url(); ?>consultas/form_consulta_factura">Facturas x Estado</a></li>
+		                                <li class="menu-item "><a href="<?php echo base_url(); ?>consultas/form_consulta_factura">Facturas y Entregas</a></li>
 		                            </ul>
 	                        	</li>
 				          	</ul>				
