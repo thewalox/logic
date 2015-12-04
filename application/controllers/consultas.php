@@ -7,8 +7,10 @@ class Consultas extends CI_controller
 	public function __construct()
 	{
 		parent::__construct();
+
 		$this->load->model("Consultas_model");
 		$this->load->model("Transportadores_model");
+		
 	}
 
 	function form_consulta_factura(){
@@ -27,7 +29,7 @@ class Consultas extends CI_controller
 	}
 
 	function filtrar_facturas(){
-		$datos = $this->Consultas_model->filtra_facturas($this->input->post("estado"), $this->input->post("tipo"),$this->input->post("fecini"), $this->input->post("fecfin"), $this->input->post("fecenvio"), $this->input->post("transp"));
+		$datos = $this->Consultas_model->filtra_facturas($this->input->post("estado"), $this->input->post("tipo"),$this->input->post("fecini"), $this->input->post("fecfin"), $this->input->post("fecenvio"), $this->input->post("transp"), $this->input->post("planilla"));
 		echo json_encode($datos);
 	}
 

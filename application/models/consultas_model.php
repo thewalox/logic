@@ -9,7 +9,7 @@ class Consultas_model extends CI_Model
 		parent::__construct();		
 	}
 
-	public function filtra_facturas($estado, $tipodoc, $fecini, $fecfin, $fecenvio, $transp){
+	public function filtra_facturas($estado, $tipodoc, $fecini, $fecfin, $fecenvio, $transp, $planilla){
 		$sql = "SELECT docnum, cardname, itemcode, itemdesc, cantidad_real, city, slpname,
 				CASE 
 				estado_factura 
@@ -41,7 +41,11 @@ class Consultas_model extends CI_Model
 			$sql .= " AND transportador = ". $this->db->escape($transp);
 		}
 
-		$sql .= " ORDER BY docdate DESC, docnum DESC ";
+		if(! empty($planilla)){
+			$sql .= " AND planilla = ". $this->db->escape($planilla);
+		}
+
+		$sql .= " ORDER BY docnum DESC, itemcode";
 
 		//echo $sql;
 		$res = $this->db->query($sql);

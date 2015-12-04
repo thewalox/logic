@@ -5,7 +5,7 @@
 					<ol class="breadcrumb">
 						<li><a href="<?php echo base_url(); ?>">Inicio</a></li>
 						<li><a href="#">Consultas</a></li>
-						<li class="active">Facturas</li>
+						<li class="active">Facturas y Entregas</li>
 					</ol>
 				</div>
 				
@@ -70,6 +70,10 @@
 					            		?>
 									</select>
 								</div>
+								<div class="col-md-3">
+									<label for="planilla">Planilla</label>
+									<input type="text" placeholder="Planilla" id="planilla" name="planilla" class="form-control input-sm">
+								</div>
 					  	</div>
 					</div>
 					<div align="center"><input type="button" name="aceptar" id="aceptar" value="Aceptar" class="btn btn-primary" data-loading-text="Buscando..." autocomplete="off"></div>
@@ -93,6 +97,7 @@
 				var fecfin = $("#fecfin").val();
 				var fecenvio = $("#fecenvio").val();
 				var transp = $("#transportador").val();
+				var planilla = $("#planilla").val();
 				
 				var html = "";
 				var reg = 0;
@@ -108,7 +113,8 @@
 				    		'fecini'	: 	fecini,
 				    		'fecfin'	: 	fecfin,
 				    		'fecenvio'	: 	fecenvio,
-				    		'transp'	: 	transp
+				    		'transp'	: 	transp,
+				    		'planilla'	: 	planilla
 				    	},
 				    	success:function(data){
 				    		console.log(data);
