@@ -121,7 +121,8 @@
 				    		var json = JSON.parse(data);
 				    		//alert(json.mensaje);
 							
-							html += "<table class='table table-striped table-condensed table-hover'>";
+							html += "<div><a href='javascript:void(0);' id='excel'><img src='<?php echo base_url(); ?>assets/img/excel.png' width='20px' height='20px' /></a></div>";
+							html += "<table class='table table-striped table-condensed table-hover' id='resultados'>";
 							html += "<thead>";
 							html += "<tr>";
 							html += "<th>#</th>";
@@ -153,10 +154,10 @@
 						
 							}
 						
-							html += "</table>";																			
+							html += "</table>";
 
 							$("#content").html(html);
-							$btn.button('reset')
+							$btn.button('reset');
 
 				    	},
 				    	error:function(jqXHR, textStatus, errorThrown){
@@ -165,6 +166,13 @@
 				    });
 				
 			});
+
+			$(document).on('click','#excel',function(){
+				$("#resultados").table2excel({
+				    exclude: ".noExl",
+				    name: "Excel Document Name"
+				}); 
+			});				
 				
 		});
 	</script>

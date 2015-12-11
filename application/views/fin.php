@@ -2,7 +2,8 @@
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/moment.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/es.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/jasny-bootstrap.min.js"></script>    
+    <script src="<?php echo base_url(); ?>assets/js/jasny-bootstrap.min.js"></script> 
+    <script src="<?php echo base_url(); ?>assets/js/jquery.table2excel.js"></script>
 
 	<script>
 		$(function () {
