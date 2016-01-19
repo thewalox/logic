@@ -121,7 +121,7 @@
 				    		var json = JSON.parse(data);
 				    		//alert(json.mensaje);
 							
-							html += "<div><a href='javascript:void(0);' id='excel'><img src='<?php echo base_url(); ?>assets/img/excel.png' width='20px' height='20px' /></a></div>";
+							html += "<div><a href='javascript:void(0);' id='excel' title='Exportar a Excel'><img src='<?php echo base_url(); ?>assets/img/excel.png' width='20px' height='20px' /></a></div>";
 							html += "<table class='table table-striped table-condensed table-hover' id='resultados'>";
 							html += "<thead>";
 							html += "<tr>";
