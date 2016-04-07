@@ -17,4 +17,22 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="col-md-3">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">ESTADO</div>
+			<div class="panel-body">
+				<ul class="list-group">
+				<?php
+				foreach ($estado as $est) {
+					//echo $t["Currency"];
+				?>
+				 	<li class="list-group-item active"><span class="badge"><?php echo number_format($est["cantidad"],0,".",","); ?></span><?php echo $est["estado"]; ?></li>
+				<?php
+				}
+				?>	
+				</ul>				
+			</div>
+		</div>
+	</div>
 </div>

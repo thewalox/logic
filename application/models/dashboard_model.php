@@ -22,4 +22,17 @@ class Dashboard_model extends CI_Model{
 		return $res->result_array();
 	}
 
+	public function estado_facturas(){
+		$sql = "SELECT 'Por Despachar' AS estado, COUNT(DISTINCT(docnum)) AS cantidad 
+				FROM log_facturas_sap 
+				WHERE estado_factura = '0'
+				UNION ALL
+				SELECT 'Pendientes' AS estado, COUNT(DISTINCT(docnum)) AS cantidad 
+				FROM log_facturas_sap 
+				WHERE estado_factura = 'P'";
+		//echo $sql;		
+		$res = $this->db->query($sql);
+		return $res->result_array();
+	}
+
 }

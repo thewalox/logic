@@ -154,7 +154,13 @@ class Gestion_model extends CI_Model
 	}
 
 	public function get_facturas_top200($limit, $segmento){
-		$sql = "SELECT DISTINCT docdate, docnum, tipodoc, cardcode, cardname 
+		$sql = "SELECT DISTINCT docdate, docnum, tipodoc, cardcode, cardname,
+				CASE 
+				estado_factura 
+				WHEN '0' THEN 'Por Despachar'
+				WHEN 'P' THEN 'Pendiente'
+				WHEN 'OK' THEN 'Ok'
+				END AS estado_factura
 				FROM log_facturas_sap
 				WHERE empresa = '". $this->session->userdata('sess_empresa') ."'
 				ORDER BY docdate DESC, docnum DESC ";
@@ -262,7 +268,13 @@ class Gestion_model extends CI_Model
 	}
 
 	public function get_facturas_by_criterio($filtro){
-		$sql = "SELECT DISTINCT docdate, docnum, tipodoc, cardcode, cardname 
+		$sql = "SELECT DISTINCT docdate, docnum, tipodoc, cardcode, cardname,
+				CASE 
+				estado_factura 
+				WHEN '0' THEN 'Por Despachar'
+				WHEN 'P' THEN 'Pendiente'
+				WHEN 'OK' THEN 'Ok'
+				END AS estado_factura
 				FROM log_facturas_sap
 				WHERE (docdate LIKE '%". $filtro ."%'
 				OR docnum LIKE '%". $filtro ."%' 
@@ -278,7 +290,7 @@ class Gestion_model extends CI_Model
 	public function calcula_flete($numero){
 		$sql = "SELECT lf.itemcode, lf.itemdesc, lf.um2, lf.volumen_m3, 
 				IFNULL(CONCAT(lf.transportador, lf.city , lf.um2), 'No Existe Tarifa') AS cod_tarifa, 
-				IFNULL(lt.valor,0) AS tarifa, IFNULL(lf.cantidad_real * lt.valor,0) AS subtotal
+				IFNULL(lt.valor,0) AS tarifa, IFNULL(lf.cantidad_real * lt.valor,0) AS subtotal, lf.kilos_emp
 				FROM log_facturas_sap lf
 				LEFT JOIN log_tarifas lt ON lt.cod_tarifa = CONCAT(transportador, city , um2)
 				WHERE docnum = '$numero' AND empresa = '". $this->session->userdata('sess_empresa') ."'";

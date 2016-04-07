@@ -31,6 +31,7 @@
 									<th>Documento</th>
 									<th>Cliente</th>
 									<th>Socio de Negocio</th>
+									<th>Estado</th>
 									<th><a href="#" title="Editar Lote de facturas seleccionadas" id="lote"><span class="glyphicon glyphicon-duplicate"></span></a></th>
 									<th></th>
 									<th></th>
@@ -46,6 +47,7 @@
 								<td><?php echo $fac["docnum"]; ?></td>
 								<td><?php echo $fac["cardcode"]; ?></td>
 								<td><?php echo $fac["cardname"]; ?></td>
+								<td><?php echo $fac["estado_factura"]; ?></td>
 								<td><input type="checkbox" name="FacMasivas[]" id="<?php echo $fac["docnum"]; ?>" value="<?php echo $fac["docnum"]; ?>"></td>
 								<td><a href="<?php echo base_url('gestion/form_editar/'. $fac["docnum"]); ?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
 								<td><a href="javascript:void(0);" class="delete" id="delete<?php echo $fac["docnum"]; ?>" data="<?php echo $fac["docnum"]; ?>"><span class="glyphicon glyphicon-trash"></span></a></td>
@@ -151,6 +153,7 @@
 						html += "<th>Documento</th>";
 						html += "<th>Cliente</th>";
 						html += "<th>Socio de Negocio</th>";
+						html += "<th>Estado</th>";
 						html += "<th><a href='#' title='Editar Lote de facturas seleccionadas' id='lote'><span class='glyphicon glyphicon-duplicate'></span></a></th>";
 						html += "<th></th>";
 						html += "<th></th>";
@@ -164,6 +167,7 @@
 								html +=	"<td>" + json[datos].docnum + "</td>";
 								html +=	"<td>" + json[datos].cardcode + "</td>";
 								html +=	"<td>" + json[datos].cardname + "</td>";
+								html +=	"<td>" + json[datos].estado_factura + "</td>";
 								html +=	"<td><input type='checkbox' name='FacMasivas[]' id='" + json[datos].docnum  + "' value='" + json[datos].docnum  + "'></td>";
 								html +=	"<td><a href='<?php echo base_url('gestion/form_editar/" + json[datos].docnum  + "'); ?>'><span class='glyphicon glyphicon-pencil'></span></a></td>";
 								html +=	"<td><a href='javascript:void(0);' class='delete' id='delete" + json[datos].docnum  + "' data='" + json[datos].docnum  + "'><span class='glyphicon glyphicon-trash'></span></a></td>";

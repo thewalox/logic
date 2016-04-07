@@ -62,7 +62,7 @@ class Gestion extends CI_controller
                                 $ent["UM"],$ent["WhsCode"],$ent["Quantity"],$ent["Iva"],$ent["SubTotal"],
                                 $ent["Total_neto"],$ent["City"],$ent["Nit"],$ent["Address2"],$ent["Total_linea"],
                                 $ent["Total_Kilos"],$ent["U_NormaReparto"],$ent["SlpName"],$ent["Centro_Costo"],
-                                $fac["U_cu_kls_emp"],$fac["U_cu_um_log"],$fac["U_cu_volumen_m3"]);
+                                $ent["U_cu_kls_emp"],$ent["U_cu_um_log"],$ent["U_cu_volumen_m3"]);
 			}
 
 			$datos = $this->Gestion_model->get_resultado_importacion();

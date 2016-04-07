@@ -458,6 +458,7 @@
 							html += "<th>Descripcion</th>";
 							html += "<th>U.M 2</th>";
 							html += "<th>Volumen m3</th>";
+							html += "<th>Kilos/Emp STD.</th>";
 							html += "<th>Codigo Tarifa</th>";
 							html += "<th>Tarifa</th>";
 							html += "<th>SubTotal</th>";
@@ -477,6 +478,7 @@
 								html +=	"<td>" + json[datos].itemdesc + "</td>";
 								html +=	"<td>" + json[datos].um2 + "</td>";
 								html +=	"<td>" + number_format(json[datos].volumen_m3,2); + "</td>";
+								html +=	"<td>" + number_format(json[datos].kilos_emp,2); + "</td>";
 								html +=	"<td>" + json[datos].cod_tarifa + "</td>";
 								html +=	"<td>" + number_format(json[datos].tarifa, 2); + "</td>";
 								
