@@ -20,6 +20,8 @@ class Home extends CI_controller
 			$datos["titulo"] = " .: Logic :.";
 			$datos["trm"] = $this->Dashboard_model->trm();
 			$datos["estado"] = $this->Dashboard_model->estado_facturas();
+			$datos["info"] = $this->Dashboard_model->resumen_mes();
+			$datos["total"] = $this->Dashboard_model->total_facturas_mes();
 
 			$this->load->view("header", $datos);
 			$this->load->view("dashboard", $datos);

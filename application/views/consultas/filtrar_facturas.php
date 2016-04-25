@@ -13,6 +13,13 @@
 					<div class="panel panel-primary">
 						<div class="panel-heading">Seleccione Filtros</div>
 					  		<div class="panel-body">
+					  			<div class="form-group col-md-3">
+									<label for="informe">Tipo Informe</label>
+									<select class="form-control input-sm" name="informe" id="informe">
+										<option value="r">Resumido</option>
+										<option value="d">Detallado</option>
+									</select>
+								</div>
 						    	<div class="form-group col-md-3">
 									<label for="estado">Estado</label>
 									<select class="form-control input-sm" name="estadofac" id="estadofac">
@@ -28,6 +35,19 @@
 										<option value="0">Todos</option>
 										<option value="F">Facturas</option>
 										<option value="E">Entregas</option>
+									</select>
+								</div>
+								<div class="form-group col-md-3">
+									<label for="transportador">Transportador</label>
+									<select class="form-control input-sm" name="transportador" id="transportador">
+										<option value="0">...</option>
+										<?php 
+											foreach($transportadores as $trp){
+										?>
+					                		<option value="<?php echo $trp['cod_transp']; ?>"><?php echo $trp['desc_transp']; ?></option>
+					            		<?php 
+					            			}
+					            		?>
 									</select>
 								</div>
 								<div class="form-group col-md-3">
@@ -58,19 +78,6 @@
 					            	</div>
 								</div>
 								<div class="col-md-3">
-									<label for="transportador">Transportador</label>
-									<select class="form-control input-sm" name="transportador" id="transportador">
-										<option value="0">...</option>
-										<?php 
-											foreach($transportadores as $trp){
-										?>
-					                		<option value="<?php echo $trp['cod_transp']; ?>"><?php echo $trp['desc_transp']; ?></option>
-					            		<?php 
-					            			}
-					            		?>
-									</select>
-								</div>
-								<div class="col-md-3">
 									<label for="planilla">Planilla</label>
 									<input type="text" placeholder="Planilla" id="planilla" name="planilla" class="form-control input-sm">
 								</div>
@@ -91,6 +98,7 @@
 
 			$('#aceptar').on('click',function(){
 				
+				var informe = $("#informe").val();
 				var estado = $("#estadofac").val();
 				var tipo = $("#tipodoc").val();
 				var fecini = $("#fecini").val();
@@ -101,6 +109,7 @@
 				
 				var html = "";
 				var reg = 0;
+				var cant = 0;
 
 				var $btn = $(this).button('loading');
 
@@ -108,6 +117,7 @@
 				    	type:"POST",
 				    	url:"<?php echo base_url('consultas/filtrar_facturas'); ?>",
 				    	data:{
+				    		'informe'	: 	informe,
 				    		'estado'	: 	estado,
 				    		'tipo'		: 	tipo,
 				    		'fecini'	: 	fecini,
@@ -119,43 +129,135 @@
 				    	success:function(data){
 				    		console.log(data);
 				    		var json = JSON.parse(data);
-				    		//alert(json.mensaje);
+				    		//alert(informe);
 							
-							html += "<div><a href='javascript:void(0);' id='excel' title='Exportar a Excel'><img src='<?php echo base_url(); ?>assets/img/excel.png' width='20px' height='20px' /></a></div>";
-							html += "<table class='table table-striped table-condensed table-hover' id='resultados'>";
-							html += "<thead>";
-							html += "<tr>";
-							html += "<th>#</th>";
-							html += "<th>Documento</th>";
-							html += "<th>Cliente</th>";
-							html += "<th>Item</th>";
-							html += "<th>Descripcion</th>";
-							html += "<th>Cantidad</th>";
-							html += "<th>Ciudad</th>";
-							html += "<th>Asesor</th>";
-							html += "<th>Estado</th>";
-							html += "</tr>";
-							html += "</thead>";
-						
-							for(datos in json){
-								reg = reg + 1;
-
+							if (informe == 'd') {
+								//detallado
+								html += "<div><a href='javascript:void(0);' id='excel' title='Exportar a Excel'><img src='<?php echo base_url(); ?>assets/img/excel.png' width='20px' height='20px' /></a></div>";
+								html += "<table class='table table-striped table-condensed table-hover' id='resultados'>";
+								html += "<thead>";
 								html += "<tr>";
-								html +=	"<td>" + reg + "</td>";
-								html +=	"<td><a href='<?php echo base_url('gestion/form_editar/" + json[datos].docnum  + "'); ?>'>" + json[datos].docnum + "</a></td>";
-								html +=	"<td>" + json[datos].cardname + "</td>";
-								html +=	"<td>" + json[datos].itemcode + "</td>";
-								html +=	"<td>" + json[datos].itemdesc + "</td>";
-								html +=	"<td align='right'>" + number_format(json[datos].cantidad_real,2) + "</td>";
-								html +=	"<td>" + json[datos].city + "</td>";
-								html +=	"<td>" + json[datos].slpname + "</td>";
-								html +=	"<td>" + json[datos].estado_factura + "</td>";
+								html += "<th>#</th>";
+								html += "<th>Fecha</th>";
+								html += "<th>Documento</th>";
+								html += "<th>Cliente</th>";
+								html += "<th>Item</th>";
+								html += "<th>Descripcion</th>";
+								html += "<th>Cantidad</th>";
+								html += "<th>U.M</th>";
+								html += "<th>Total Venta</th>";
+								html += "<th>Ciudad</th>";
+								html += "<th>Transportador</th>";
+								html += "<th>Fecha Envio</th>";
+								html += "<th>Fecha Recibo</th>";
+								html += "<th>Ind. Envio</th>";
+								html += "<th>Ind. Recibo</th>";
+								html += "<th>Placa</th>";
+								html += "<th>Flete</th>";
 								html += "</tr>";
-						
-							}
-						
-							html += "</table>";
+								html += "</thead>";
+							
+								for(datos in json){
+									reg = reg + 1;
+									cant = parseFloat(cant)  + parseFloat(json[datos].cantidad_real);
 
+									html += "<tr>";
+									html +=	"<td>" + reg + "</td>";
+									html +=	"<td>" + json[datos].docdate + "</td>";
+									html +=	"<td><a href='<?php echo base_url('gestion/form_editar/" + json[datos].docnum  + "'); ?>'>" + json[datos].docnum + "</a></td>";
+									html +=	"<td>" + json[datos].cardname + "</td>";
+									html +=	"<td>" + json[datos].itemcode + "</td>";
+									html +=	"<td>" + json[datos].itemdesc + "</td>";
+									html +=	"<td align='right'>" + number_format(json[datos].cantidad_real,2) + "</td>";
+									html +=	"<td>" + json[datos].um + "</td>";
+									html +=	"<td>" + number_format(json[datos].subtotal,2) + "</td>";
+									html +=	"<td>" + json[datos].city + "</td>";
+									html +=	"<td>" + json[datos].desc_transp + "</td>";
+									html +=	"<td>" + json[datos].fecha_envio + "</td>";
+									html +=	"<td>" + json[datos].fecha_recibido + "</td>";
+									html +=	"<td>" + json[datos].ind_despacho + "</td>";
+									html +=	"<td>" + json[datos].ind_entrega + "</td>";
+									html +=	"<td>" + json[datos].placa + "</td>";
+									html +=	"<td>" + number_format(json[datos].valor_flete,2) + "</td>";
+									html += "</tr>";
+							
+								}
+
+								html += "<tfoot>";
+								html += "<tr>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td align='right'>" + number_format(cant,2) + "</td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "</tr>";
+								html += "</tfoot>";
+							
+								html += "</table>";
+							}else{
+								html += "<div><a href='javascript:void(0);' id='excel' title='Exportar a Excel'><img src='<?php echo base_url(); ?>assets/img/excel.png' width='20px' height='20px' /></a></div>";
+								html += "<table class='table table-striped table-condensed table-hover' id='resultados'>";
+								html += "<thead>";
+								html += "<tr>";
+								html += "<th>#</th>";
+								html += "<th>Documento</th>";
+								html += "<th>Cliente</th>";
+								html += "<th>Item</th>";
+								html += "<th>Descripcion</th>";
+								html += "<th>Cantidad</th>";
+								html += "<th>Ciudad</th>";
+								html += "<th>Asesor</th>";
+								html += "<th>Estado</th>";
+								html += "</tr>";
+								html += "</thead>";
+							
+								for(datos in json){
+									reg = reg + 1;
+									cant = parseFloat(cant)  + parseFloat(json[datos].cantidad_real);
+
+									html += "<tr>";
+									html +=	"<td>" + reg + "</td>";
+									html +=	"<td><a href='<?php echo base_url('gestion/form_editar/" + json[datos].docnum  + "'); ?>'>" + json[datos].docnum + "</a></td>";
+									html +=	"<td>" + json[datos].cardname + "</td>";
+									html +=	"<td>" + json[datos].itemcode + "</td>";
+									html +=	"<td>" + json[datos].itemdesc + "</td>";
+									html +=	"<td align='right'>" + number_format(json[datos].cantidad_real,2) + "</td>";
+									html +=	"<td>" + json[datos].city + "</td>";
+									html +=	"<td>" + json[datos].slpname + "</td>";
+									html +=	"<td>" + json[datos].estado_factura + "</td>";
+									html += "</tr>";
+							
+								}
+
+								html += "<tfoot>";
+								html += "<tr>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td align='right'>" + number_format(cant,2) + "</td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "<td></td>";
+								html += "</tr>";
+								html += "</tfoot>";
+								
+							
+								html += "</table>";
+							}
 							$("#content").html(html);
 							$btn.button('reset');
 

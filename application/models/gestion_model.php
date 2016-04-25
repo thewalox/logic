@@ -191,7 +191,7 @@ class Gestion_model extends CI_Model
 		return $res->result_array();
 	}
 
-	public function edit_factura($factura, $transp, $fecenv, $horaenv, $plan, $guia, $placa, $valseg, $gastos, $tiposer, $estfac, $obs, $dev, $recib, $fecharec, $items, $fletes){
+	public function edit_factura($factura, $transp, $fecenv, $horaenv, $plan, $guia, $placa, $valseg, $gastos, $tiposer, $estfac, $obs, $dev, $recib, $fecharec, $items){
 		$sql = "UPDATE log_facturas_sap SET transportador = ". $this->db->escape($transp) .", fecha_envio = ". $this->db->escape($fecenv) .
 				", hora_envio = ". $this->db->escape($horaenv) .", planilla = UPPER(". $this->db->escape($plan) . "), 
 				guia = UPPER(". $this->db->escape($guia) ."), placa = UPPER(". $this->db->escape($placa) . "), 
@@ -206,28 +206,14 @@ class Gestion_model extends CI_Model
 
 		foreach ($items as $item) {
 			$sql = "UPDATE log_facturas_sap SET cantidad_real = ". $this->db->escape($item["cantidad"]) ." 
-			WHERE docnum = '$factura' AND itemcode = ". $this->db->escape($item["itemcode"]) ." 
+			WHERE docnum = '$factura' AND itemcode = ". $this->db->escape($item["itemcode"]) ."
+			AND linenum = ". $this->db->escape($item["linea"]) ."
 			AND empresa = '". $this->session->userdata('sess_empresa') ."'";
 
 			if ($this->db->simple_query($sql)){
         		$mensaje =  2; //Exito
 			}else{
 	        	$mensaje = 3; //Error
-			}
-		}
-
-		if (isset($fletes)) {
-			foreach ($fletes as $flete) {
-				$sql = "UPDATE log_facturas_sap SET valor_flete = ". $this->db->escape($flete["valor_flete"]) .",
-				cod_tarifa = ". $this->db->escape($flete["cod_tarifa"]) ." 
-				WHERE docnum = '$factura' AND itemcode = ". $this->db->escape($flete["itemcode"]) ." 
-				AND empresa = '". $this->session->userdata('sess_empresa') ."'";
-				//echo $sql;
-				if ($this->db->simple_query($sql)){
-	        		$mensaje =  2; //Exito
-				}else{
-		        	$mensaje = 3; //Error
-				}
 			}
 		}
 				
@@ -287,8 +273,20 @@ class Gestion_model extends CI_Model
 		
 	}
 
-	public function calcula_flete($numero){
-		$sql = "SELECT lf.itemcode, lf.itemdesc, lf.um2, lf.volumen_m3, 
+	public function calcula_fletes($fecini, $fecfin){
+		$sql = "SELECT lf.docnum, lf.itemcode, lf.itemdesc, lf.um2, lf.volumen_m3, lf.cantidad_real,
+				IFNULL(CONCAT(lf.transportador, lf.city , lf.um2), 'No Existe Tarifa') AS cod_tarifa, 
+				IFNULL(lt.valor,0) AS tarifa, IFNULL(lf.cantidad_real * lt.valor,0) AS subtotal, lf.kilos_emp
+				FROM log_facturas_sap lf
+				LEFT JOIN log_tarifas lt ON lt.cod_tarifa = CONCAT(transportador, city , um2)
+				WHERE lt.valor > 0 AND lf.docdate BETWEEN (". $this->db->escape($fecini) .") AND (". $this->db->escape($fecfin) .")
+				AND empresa = '". $this->session->userdata('sess_empresa') ."'";
+		$res = $this->db->query($sql);
+		return $res->result_array();
+	}
+
+	public function calcula_flete_by_documento($numero){
+		$sql = "SELECT lf.docnum, lf.itemcode, lf.itemdesc, lf.um2, lf.volumen_m3, lf.cantidad_real,
 				IFNULL(CONCAT(lf.transportador, lf.city , lf.um2), 'No Existe Tarifa') AS cod_tarifa, 
 				IFNULL(lt.valor,0) AS tarifa, IFNULL(lf.cantidad_real * lt.valor,0) AS subtotal, lf.kilos_emp
 				FROM log_facturas_sap lf
@@ -305,6 +303,35 @@ class Gestion_model extends CI_Model
 		$res = $this->db->query($sql);
 
 		return $res->row();
+	}
+
+	public function update_fletes($fletes){
+		$cant = 0;
+
+		foreach ($fletes as $flete) {
+			$sql = "UPDATE log_facturas_sap SET valor_flete = ". $this->db->escape($flete["subtotal"]) .",
+			cod_tarifa = ". $this->db->escape($flete["cod_tarifa"]) ." 
+			WHERE docnum = ". $this->db->escape($flete["docnum"]) ." AND itemcode = ". $this->db->escape($flete["itemcode"]) ." 
+			AND empresa = '". $this->session->userdata('sess_empresa') ."'";
+			//echo $sql;
+			$this->db->simple_query($sql);
+	       	
+	       	$cant = $cant + 1;	
+		}
+
+		return $cant;
+		
+	}
+
+	public function update_info_entregas($docnum, $guia, $fecharec, $recibido){
+		$sql = "UPDATE log_facturas_sap SET guia = ". $this->db->escape($guia) .",
+				fecha_recibido = ". $this->db->escape($fecharec) .",
+				recibido_por = UPPER(". $this->db->escape($recibido) ."),
+				estado_factura = 'OK'
+				WHERE docnum = ". $this->db->escape($docnum) ."
+				AND empresa = '". $this->session->userdata('sess_empresa') ."'";
+			//echo $sql;
+			$this->db->simple_query($sql);
 	}
 
 }

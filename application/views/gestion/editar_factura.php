@@ -226,7 +226,7 @@
 								<td align="right"><?php echo number_format($fac["subtotal"],2,".",","); ?></td>
 								<td align="right"><?php echo number_format($fac["iva"],2,".",","); ?></td>
 								<td align="right"><?php echo number_format($fac["total_neto"],2,".",","); ?></td>
-								<td><div class="col-xs-5"><input type='text' class="form-control input-sm" name="cantreal[]" id="<?php echo $fac["itemcode"]; ?>" value="<?php echo number_format($fac["cantidad_real"]); ?>" <?php if ($valida_flete->flete > 0) {?> disabled <?php } ?> /></div></td>
+								<td><div class="col-xs-5"><input type='text' class="form-control input-sm" name="cantreal[]" id="<?php echo $fac["itemcode"]; ?>" value="<?php echo number_format($fac["cantidad_real"]); ?>" linea="<?php echo $fac["linenum"]; ?>" <?php if ($valida_flete->flete > 0) {?> disabled <?php } ?> /></div></td>
 							</tr>
 							<?php
 								}
@@ -243,12 +243,8 @@
 				  		<?php
 				  			if ($valida_flete->flete == 0) {
 				  		?>
-				  			<div class="row">
-				  				<div class="col-md-12" align="center">
-					  				<input type="button" name="generar" id="generar" value="Calcular Flete" class="btn btn-warning">
-					  			</div>
-				  			</div>
-				  			<br>
+				  			<div class='alert alert-danger text-center' role='alert'>El proceso de calculo del flete aun no ha sido generado para este documento</div>
+				  			
 				  		<?php
 				  			}else{
 				  		?>
@@ -367,12 +363,13 @@
 				   	items[i] = new Object();
 
 					items[i]["itemcode"] = $(this).attr("id"); //item
+					items[i]["linea"] = $(this).attr("linea"); //Linea
 					items[i]["cantidad"] = $(this).val(); //valor
 					
 				   	i++;
 				});
 
-				$('input[name="valflete[]"]').each(function(){
+				/*$('input[name="valflete[]"]').each(function(){
 				   	fletes[j] = new Object();
 
 					fletes[j]["itemcode"] = $(this).attr("id"); //item
@@ -380,7 +377,7 @@
 					fletes[j]["cod_tarifa"] = $(this).attr("cod"); //codigo tarifa
 					//alert($(this).attr("cod"));
 				   	j++;
-				});
+				});*/
 				
 			    $.ajax({
 			    	type:"POST",
@@ -401,8 +398,8 @@
 			    		'dev'			: 	dev,
 			    		'recibido'		: 	recibido,
 			    		'fecrecibo'		: 	fecrecibo,
-			    		'items'			: 	items,
-			    		'fletes'		: 	fletes
+			    		'items'			: 	items
+			    		//'fletes'		: 	fletes
 			    	},
 			    	success:function(data){
 			    		console.log(data);
@@ -431,83 +428,6 @@
 
 			});
 
-			$('#generar').on('click',function(){
-
-				var factura = $("#factura").val();
-				
-			    $.ajax({
-			    	type:"GET",
-			    	url:"<?php echo base_url('gestion/calcular_fletes'); ?>",
-			    	data:{
-			    		'id'	: 	factura
-			    	},
-			    	success:function(data){
-			    		console.log(data);
-			    		var json = JSON.parse(data);
-			    		//alert(json.mensaje);
-						var html = "";
-						var clase  = "";
-						var cod_tarifa = "";
-						var total = 0;
-							
-					    	html += "<form name='form' method='post'>";
-							html += "<table class='table table-striped table-condensed table-hover'>";
-							html += "<thead>";
-							html += "<tr>";
-							html += "<th>Item</th>";
-							html += "<th>Descripcion</th>";
-							html += "<th>U.M 2</th>";
-							html += "<th>Volumen m3</th>";
-							html += "<th>Kilos/Emp STD.</th>";
-							html += "<th>Codigo Tarifa</th>";
-							html += "<th>Tarifa</th>";
-							html += "<th>SubTotal</th>";
-							html += "</tr>";
-							html += "</thead>";
-						
-							for(datos in json){
-
-								if (json[datos].tarifa == 0) {
-									clase = "danger";
-								}else{
-									clase = "success";
-								}
-
-								html += "<tr class='"+ clase +"'>";
-								html +=	"<td>" + json[datos].itemcode + "</td>";
-								html +=	"<td>" + json[datos].itemdesc + "</td>";
-								html +=	"<td>" + json[datos].um2 + "</td>";
-								html +=	"<td>" + number_format(json[datos].volumen_m3,2); + "</td>";
-								html +=	"<td>" + number_format(json[datos].kilos_emp,2); + "</td>";
-								html +=	"<td>" + json[datos].cod_tarifa + "</td>";
-								html +=	"<td>" + number_format(json[datos].tarifa, 2); + "</td>";
-								
-								html +=	"<td><div class='col-xs-10'><input type='text' class='form-control input-sm' name='valflete[]' id="+ json[datos].itemcode +" value="+ json[datos].subtotal +" cod='" + json[datos].cod_tarifa + "' readonly/></div></td>";
-								html += "</tr>";
-
-								total = parseFloat(total) + parseFloat(json[datos].subtotal);
-								cod_tarifa = json[datos].cod_tarifa;
-							}
-							
-							html += "</table>";
-
-							html += "<div class='row'>";
-							html += "<div class='col-md-2 col-md-offset-10'>";
-							html += "<button class='btn btn-primary' type='button'>";
-							html += "Total Flete: <span class='badge'>"+ number_format(total, 2) +"</span>";
-							html += "</button>";
-							html += "</div>";
-							html += "</div>";
-							html += "</form>";
-								
-							$("#flete").html(html);	
-			    	},
-			    	error:function(jqXHR, textStatus, errorThrown){
-			    		console.log('Error: '+ errorThrown);
-			    	}
-			    });
-
-			});
 				
 		});
 	</script>

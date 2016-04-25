@@ -123,7 +123,7 @@ class Gestion extends CI_controller
 		
 	}
 
-	function form_editar($id){
+	function form_editar($id = null){
 
 		if (!$this->session->userdata('sess_id_user')) {
 		   	redirect("login");
@@ -134,6 +134,7 @@ class Gestion extends CI_controller
 			$datos["servicios"] = $this->Servicios_model->get_servicios(0, 0);
 			$datos["factura"] = $this->Gestion_model->get_factura_by_id($id);
 			$datos["valida_flete"] = $this->Gestion_model->tiene_flete($id);
+			$datos["flete"] = $this->Gestion_model->calcula_flete_by_documento($id);
 			//print_r($datos);
 
 		    $this->load->view("header", $datos);
@@ -144,8 +145,38 @@ class Gestion extends CI_controller
 		
 	}
 
+	function form_generar(){
+
+		if (!$this->session->userdata('sess_id_user')) {
+		   	redirect("login");
+		}else{
+			$datos["titulo"] = " .: Logic :.";
+
+		    $this->load->view("header", $datos);
+		    $this->load->view("gestion/generar_fletes", $datos);
+		    $this->load->view("footer", $datos);
+		    $this->load->view("fin", $datos);
+		}
+		
+	}
+
+	function form_act_entregas(){
+
+		if (!$this->session->userdata('sess_id_user')) {
+		   	redirect("login");
+		}else{
+			$datos["titulo"] = " .: Logic :.";
+
+		    $this->load->view("header", $datos);
+		    $this->load->view("gestion/actualizar_entregas", $datos);
+		    $this->load->view("footer", $datos);
+		    $this->load->view("fin", $datos);
+		}
+		
+	}
+
 	function editar_factura(){
-		$datos["mensaje"] = $this->Gestion_model->edit_factura($this->input->post("factura"), $this->input->post("transp"), $this->input->post("fecenvio"), $this->input->post("horaenvio"), $this->input->post("planilla"),$this->input->post("guia"), $this->input->post("placa"), $this->input->post("seguro"), $this->input->post("gastos"), $this->input->post("servicio"), $this->input->post("estadofac"),$this->input->post("obs"), $this->input->post("dev"), $this->input->post("recibido"), $this->input->post("fecrecibo"), $this->input->post("items"), $this->input->post("fletes"));
+		$datos["mensaje"] = $this->Gestion_model->edit_factura($this->input->post("factura"), $this->input->post("transp"), $this->input->post("fecenvio"), $this->input->post("horaenvio"), $this->input->post("planilla"),$this->input->post("guia"), $this->input->post("placa"), $this->input->post("seguro"), $this->input->post("gastos"), $this->input->post("servicio"), $this->input->post("estadofac"),$this->input->post("obs"), $this->input->post("dev"), $this->input->post("recibido"), $this->input->post("fecrecibo"), $this->input->post("items"));
 		echo json_encode($datos);
 	}
 
@@ -167,7 +198,7 @@ class Gestion extends CI_controller
 		$facturas = $this->input->post("lote");
 
 		foreach ($facturas as $fac) {
-			$where .= "'". $fac["value"] ."',";
+			$where .= "'". $fac["value"] ."',";			
 		}
 
 		$where = trim($where, ",");
@@ -179,9 +210,83 @@ class Gestion extends CI_controller
 		echo json_encode($datos);
 	}
 
-	function calcular_fletes(){
-		$datos = $this->Gestion_model->calcula_flete($this->input->get("id"));
+	function generar_fletes(){
+		$fletes = $this->Gestion_model->calcula_fletes($this->input->post("fecini"), $this->input->post("fecfin"));
+		$datos["cant"] = $this->Gestion_model->update_fletes($fletes);
 		echo json_encode($datos);
+		//print_r($datos);
+	}
+
+	public function actualizar_entregas(){
+		$config["upload_path"] = realpath(APPPATH."../assets/files");
+		$config["allowed_types"] = "xlsx";
+		$config["max_size"] = "0";
+
+		$this->load->library("upload", $config);
+
+		if (!$this->upload->do_upload('file')) {
+			
+			$datos["tipo"] = 0; //0 = error, 1= success
+			$datos["errores"] = $this->upload->display_errors();
+
+			echo json_encode($datos);
+		}else{
+			$data = array("upload_data" => $this->upload->data());
+
+			$this->load->library("PHPExcel");
+
+			$objPHPExcel = PHPExcel_IOFactory::load(APPPATH."../assets/files/".$data['upload_data']['file_name']);
+
+			unlink($config["upload_path"].'/'.$data['upload_data']['file_name']);
+
+			$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+
+			//print_r($cell_collection);
+			$header = array();
+			$array_data = array();
+
+			foreach ($cell_collection as $cell) {
+				$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn(); //obtenemos las columnas
+				$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow(); //obtenemos el numero de filas
+
+				$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+				if($row == 1){
+					$header[$row][$column] = $data_value;
+				}else{
+					$array_data[$row][$column] = $data_value;
+				}
+			}
+			//print_r($array_data);
+			//$datos["header"] = $header;
+			//$datos["values"] = $array_data;
+			$cont_edit = 0;
+			$cont_no = 0;
+
+			foreach ($array_data as $data) {
+
+				$factura = $this->Gestion_model->get_factura_by_id($data["A"]);
+
+				if ($factura) {
+					$this->Gestion_model->update_info_entregas($data["A"], $data["B"], $data["D"], $data["E"]);	
+					$cont_edit = $cont_edit + 1;
+				}else{
+					$array_res[] = array('documento' => $data["A"]);
+					$cont_no = $cont_no + 1;	
+				}
+
+				
+			}
+			//print_r($array_res);
+			$datos["edit"] = $cont_edit;
+			$datos["no"] = $cont_no;
+			$datos["resultado"] = $array_res;
+			$datos["tipo"] = 1; //0 = error, 1= success
+
+			echo json_encode($datos);
+
+		}
+
 	}
 
 }

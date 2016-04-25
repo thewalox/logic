@@ -61,8 +61,17 @@
 						<li class="menu-item dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gestion de Facturacion <span class="caret"></span></a>
 							<ul class="dropdown-menu">
-					            <li><a href="<?php echo base_url(); ?>gestion/form_importar">Importar Facturacion SAP</a></li>
-					            <li role="separator" class="divider"></li>
+								<li class="menu-item dropdown dropdown-submenu">
+		                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Procesos Masivos</a>
+		                            <ul class="dropdown-menu">
+		                                <li><a href="<?php echo base_url(); ?>gestion/form_importar">Importar Facturacion SAP</a></li>
+		                                <li role="separator" class="divider"></li>
+					            		<li><a href="<?php echo base_url(); ?>gestion/form_generar">Generacion de Fletes</a></li>
+					            		<li role="separator" class="divider"></li>
+					            		<li><a href="<?php echo base_url(); ?>gestion/form_act_entregas">Actualizar Informacion de Entrega</a></li>
+		                            </ul>
+	                        	</li>
+	                        	<li role="separator" class="divider"></li>
 					            <li><a href="<?php echo base_url(); ?>gestion/form_buscar">Registro de facturas y entregas</a></li>
 					            <li role="separator" class="divider"></li>
 					           	<li class="menu-item dropdown dropdown-submenu">
